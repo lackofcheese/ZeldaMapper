@@ -7,7 +7,8 @@ import Image
 HELP_STRING = """\
 Automated Zelda mapper!
 Take screenshots in-game and the map will automatically be updated with that
-screen. Switch to mapping a dungeon using a command like "/level-1".
+screen. Switch to mapping a dungeon using a command like "/level-1", or
+map grottos using "/grottos".
 
 Commands:
 exit - quit the mapper

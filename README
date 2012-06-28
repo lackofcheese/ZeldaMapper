@@ -1,0 +1,6 @@
+An automated mapper for Zelda and ZeldaC (NES), and possibly other games
+of a similar nature.
+
+Take screenshots in-game and the mapper will automatically update the png
+map files; use the command-line interface to tell the application when
+to change map (e.g. for dungeons or to record what's in the grottos)
