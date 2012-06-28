@@ -1,5 +1,7 @@
 An automated mapper for Zelda and ZeldaC (NES), and possibly other games
-of a similar nature.
+of a similar nature. The idea is to generate a map using only what you've
+seen so far, thus avoiding any spoilers you'd get by looking one up on the
+Internet.
 
 Take screenshots in-game and the mapper will automatically update the png
 map files; use the command-line interface to tell the application when

@@ -156,22 +156,26 @@ class Mapper(object):
         tile co-ordinates (i,j). """
         return data[self._x0+i*self._dx, self._y0+j*self._dy] in self._colors
 
-def watch_folder(folder, fmt, mapper, mapper_lock, clean_event, exit_event):
+def watch_folder(period, folder, fmt, mapper,
+        mapper_lock, clean_event, exit_event):
     """ A thread to continuously watch the screenshot folder
-    for new screenshots; checks every second until it detects
-    that exit_event is set. """
-    processed = set()
-    if os.path.isfile('processed.txt'):
-        with open('processed.txt', 'rU') as f:
+    for new screenshots; checks with the given period (in seconds)
+    until it detects that exit_event is set. """
+    # Load the list of files to be ignored (usually ones that have already
+    # been processed).
+    ignores = set()
+    if os.path.isfile('ignores.txt'):
+        with open('ignores.txt', 'rU') as f:
             for line in f:
                 line = line.strip()
                 if line:
-                    processed.add(line.strip())
+                    ignores.add(line.strip())
+    # Start the update loop.
     while True:
         clean = clean_event.is_set()
         for name in os.listdir(folder):
             filepath = os.path.join(folder, name)
-            if name not in processed:
+            if name not in ignores:
                 m = re.match(fmt, name)
                 if m is None:
                     sys.stderr.write('Invalid filename {} - '
@@ -184,16 +188,17 @@ def watch_folder(folder, fmt, mapper, mapper_lock, clean_event, exit_event):
                     with mapper_lock:
                         mapper.set_game_loc(game, '')
                         mapper.process(Image.open(filepath))
-                processed.add(name)
+                ignores.add(name)
                 if not clean:
-                    with open('processed.txt', 'a') as f:
+                    with open('ignores.txt', 'a') as f:
                         f.write(name + '\n')
             if clean:
                 os.remove(filepath)
         if clean:
-            processed.clear()
+            ignores.clear()
+            open('ignores.txt', 'w').close()
             clean_event.clear()
-        if exit_event.wait(1.0):
+        if exit_event.wait(period):
             break
 
 if __name__ == '__main__':
@@ -208,7 +213,8 @@ if __name__ == '__main__':
     clean_event = threading.Event()
     exit_event = threading.Event()
     update_thread = threading.Thread(target=watch_folder,
-            args=(os.path.expanduser(settings.get('Snaps', 'folder')),
+            args=(1.0,
+                os.path.expanduser(settings.get('Snaps', 'folder')),
                 settings.get('Snaps', 'format'),
                 mapper, mapper_lock, clean_event, exit_event))
 
