@@ -133,7 +133,7 @@ class Mapper(object):
         """ Loads the settings for the current game. """
         settings = ConfigParser.RawConfigParser()
         settings.read(['game-defaults.cfg', 
-            os.path.join('game-settings', self._game)])
+            os.path.join('game-settings', self._game + '.cfg')])
         self._screen_width = settings.getint('Screen', 'width')
         self._screen_height = settings.getint('Screen', 'height')
         self._tile_width = settings.getint('Tile', 'width')
