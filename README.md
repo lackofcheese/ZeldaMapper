@@ -1,8 +1,25 @@
+ZeldaMapper
+===========
 An automated mapper for Zelda and ZeldaC (NES), and possibly other games
 of a similar nature. The idea is to generate a map using only what you've
 seen so far, thus avoiding any spoilers you'd get by looking one up on the
 Internet.
 
+Configuration
+-------------
+Before using the mapper, you will need to change these two settings in
+settings.cfg:
+- **"folder" in [Snaps]** - the directory to be watched for new screenshots.
+This should be the same as the output folder for screenshots you set in your
+emulator.
+- **"folder" in [Maps]** - the output directory for the .png maps created by
+this program.
+Additionally, if you are using an emulator other than FCEUX you will probably
+need to change the setting "format" in [Snaps]; if automatic recognition of the
+current game is not required, `.*\.png` should work for all emulators.
+
+Usage
+-----
 To run and use the mapper, simply run mapper.py from a command line; basic usage
 instructions are given on startup. The mapper works by monitoring a particular
 screenshot folder for new screenshots---the folder to be monitored can be set
@@ -15,6 +32,8 @@ as long as the mapper program is running whenever you actually take a
 screenshot in-game. Any screenshots you took while not running mapper.py
 will simply be ignored.
 
+Switching between multiple maps for the same game
+-------------------------------------------------
 While the mapper is running, it cannot automatically recognize the difference
 between different maps in the game (e.g. the overworld vs the first dungeon).
 In order to make two different maps at once, you should use the command line
