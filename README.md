@@ -14,6 +14,7 @@ This should be the same as the output folder for screenshots you set in your
 emulator.
 - **"folder" in [Maps]** - the output directory for the .png maps created by
 this program.
+
 Additionally, if you are using an emulator other than FCEUX you will probably
 need to change the setting "format" in [Snaps]; if automatic recognition of the
 current game is not required, `.*\.png` should work for all emulators.
