@@ -1,8 +1,15 @@
 #!/usr/bin/env python
+from __future__ import print_function
+
 import os, time, sys, re, subprocess
-import ConfigParser
+if sys.version_info >= (3, 0):
+    import configparser
+else:
+    import ConfigParser as configparser
+    input = raw_input
 import threading
-import Image
+from PIL import Image
+
 
 HELP_STRING = """Automated Zelda mapper!
 Take screenshots in-game and the map will automatically be updated with that
@@ -47,8 +54,8 @@ class Mapper(object):
             return
         data = snap.load()
         coords = None
-        for i in xrange(self._num_hori):
-            for j in xrange(self._num_vert):
+        for i in range(self._num_hori):
+            for j in range(self._num_vert):
                 if self.has_character_at(data, (i, j)):
                     coords = (i, j)
                     break
@@ -69,8 +76,9 @@ class Mapper(object):
         """ Uses an external application to display the current map. """
         open_file(self._display_map_path)
         
-    def update_tile(self, (i, j), im):
+    def update_tile(self, coords, im):
         """ Updates a given tile in the current map. """
+        i, j = coords
         self._map.paste(im, (i * self._tile_width, j * self._tile_height))
 
     def clear_map(self):
@@ -130,7 +138,7 @@ class Mapper(object):
 
     def load_settings(self):
         """ Loads the settings for the current game. """
-        settings = ConfigParser.RawConfigParser()
+        settings = configparser.RawConfigParser()
         settings.read(['game-defaults.cfg', 
             os.path.join('game-settings', self._game + '.cfg')])
         self._screen_width = settings.getint('Screen', 'width')
@@ -150,9 +158,10 @@ class Mapper(object):
         self._colors = [int(c) for c in 
                 settings.get(self._loc, 'colors').split(',')]
 
-    def has_character_at(self, data, (i, j)):
+    def has_character_at(self, data, coords):
         """ Checks if the minimap in the frame data matches
         tile co-ordinates (i,j). """
+        i, j = coords
         return data[self._x0+i*self._dx, self._y0+j*self._dy] in self._colors
 
 def watch_folder(period, folder, fmt, mapper,
@@ -201,7 +210,7 @@ def watch_folder(period, folder, fmt, mapper,
             break
 
 if __name__ == '__main__':
-    settings = ConfigParser.SafeConfigParser()
+    settings = configparser.SafeConfigParser()
     settings.read('settings.cfg')
     mapper = Mapper(os.path.expanduser(settings.get('Maps', 'folder')),
             os.path.expanduser(settings.get('Maps', 'display_file')),
@@ -217,12 +226,12 @@ if __name__ == '__main__':
                 settings.get('Snaps', 'format'),
                 mapper, mapper_lock, clean_event, exit_event))
 
-    print HELP_STRING
-    print
+    print(HELP_STRING)
+    print()
     update_thread.start()
     # Command line I/O loop
     while True:
-        line = raw_input('>>> ')
+        line = input('>>> ')
         if len(line.split()) == 1:
             line = line.strip()
             if line == 'exit':
