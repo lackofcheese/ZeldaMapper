@@ -28,6 +28,7 @@ reset - reset the current map"""
 def open_file(filepath):
     """ Opens a file using the default application for that file type.
     This is used to open a viewer for the map file."""
+    filepath = os.path.normpath(filepath)
     if sys.platform.startswith('darwin'):
         subprocess.call(('open', filepath))
     elif os.name == 'nt':

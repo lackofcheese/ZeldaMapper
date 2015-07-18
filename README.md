@@ -7,13 +7,10 @@ Internet.
 
 Configuration
 -------------
-Before using the mapper, you will need to change these two settings in
-settings.cfg:
-- **"folder" in [Snaps]** - the directory to be watched for new screenshots.
-This should be the same as the output folder for screenshots you set in your
-emulator.
-- **"folder" in [Maps]** - the output directory for the .png maps created by
-this program.
+Before using the mapper, you will need to change "folder" in the [Snaps]
+section of settings.cfg, which sets the directory to be watched for new
+screenshots. This should be the same as your emulator's screenshot output
+folder.
 
 Additionally, if you are using an emulator other than FCEUX you will probably
 need to change the setting "format" in [Snaps]; if automatic recognition of the
